@@ -1,0 +1,5 @@
+[data-component='canvas'] {
+  & canvas {
+    border: .25em solid violet;
+  }
+}
