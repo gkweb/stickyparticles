@@ -1,5 +1,25 @@
 [data-component='canvas'] {
+  width: 99vw;
+  height: 99vh;
+  margin: 0 auto;
+  box-sizing: border-box;
+  position: relative;
+  & > * {
+    box-sizing: border-box;
+  }
+  & .debug {
+    display: none;
+    & > span {
+      display: block;
+      font-weight: bold;
+    }
+  }
   & canvas {
-    border: .25em solid violet;
+    /*border: .25em solid violet;*/
+  }
+  & .toggle {
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 }

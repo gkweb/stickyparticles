@@ -1,3 +1,6 @@
 mixin canvas(props)
   section(data-component='canvas')
+    .debug
     canvas#canvas(width=500, height=500)
+    button.toggle!= 'toggle'
+    button.generate!= 'duplicate'
