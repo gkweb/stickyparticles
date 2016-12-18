@@ -1,7 +1,4 @@
-#Work in progress of my new portfolio
-
-## Built with barebones:
-# ![Barebones](http://jaydenseric.com/shared/barebones-logo.svg)
+#Having some fun with particles
 
 ## Setup
 
@@ -23,3 +20,6 @@ For development tools and building:
 | `npm run build`       | Compile JS and CSS to `/bundle`.                |
 | `npm run build:watch` | Build, rebuilding on source file changes.       |
 | `npm start`           | Start a dev server and open in browser.         |
+
+## Built with barebones:
+# ![Barebones](http://jaydenseric.com/shared/barebones-logo.svg)
