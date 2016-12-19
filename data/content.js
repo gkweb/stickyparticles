@@ -1,6 +1,6 @@
 let content = {
   props: {
-    title: 'CanvAAAASSS',
+    title: 'Sticky Particles',
     externalLinks: [
       {
         attributes: {

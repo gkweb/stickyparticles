@@ -4,24 +4,33 @@ export default class Canvas {
    * @param {HTMLElement} options.element -
    */
   constructor (options) {
-    console.log('Constructed')
-
     this.element = options.element
     this.debug = this.element.querySelector('.debug')
     this.canvas = this.element.querySelector('canvas')
-    this.setCanvasSize()
     this.toggleBtn = this.element.querySelector('.toggle')
     this.genBtn = this.element.querySelector('.generate')
+    this.ballsAmountSlider = this.element.querySelector('.ctrl-particles-amount')
+    this.velocityXSlider = this.element.querySelector('.ctrl-velocity-x')
+    this.velocityYSlider = this.element.querySelector('.ctrl-velocity-y')
+    this.gravitySlider = this.element.querySelector('.ctrl-gravity')
+    // setTimeout(::this.setCanvasSize(), 1000)
+    this.setCanvasSize()
+
     this.ctx = this.canvas.getContext('2d')
-    this.colours = ['transparent']
+    this.colours = ['#ddd']
     this.settings = {}
     this.settings.playing = true
-    this.settings.gravity = 0
-    this.settings.ballsAmount = 10
-    this.settings.ballMinWidth = 5
-    this.settings.ballMaxWidth = 5
+    this.settings.gravity = 0.0001
+    this.settings.growThreshold = 5
     this.settings.collision = {}
-    this.settings.collision.tileSize = 50
+    this.settings.collision.tileSize = 55
+    this.settings.lines = true
+    this.settings.generate = {}
+    this.settings.generate.ballsAmount = 100
+    this.settings.generate.ballMinWidth = 3
+    this.settings.generate.ballMaxWidth = 3
+    this.settings.generate.velocityX = 0.001
+    this.settings.generate.velocityY = 0.001
 
     // Setup the balls
     this.balls = []
@@ -35,8 +44,19 @@ export default class Canvas {
       this.generateBalls()
     })
 
+    this.ballsAmountSlider.addEventListener('input', event => {
+      this.settings.generate.ballsAmount = this.ballsAmountSlider.value
+    })
+    this.velocityXSlider.addEventListener('input', event => {
+      this.settings.generate.velocityX = this.velocityXSlider.value
+    })
+    this.gravitySlider.addEventListener('input', event => {
+      this.settings.gravity = this.gravitySlider.value - 0
+    })
+    this.velocityYSlider.addEventListener('input', event => {
+      this.settings.generate.velocityY = this.velocityXSlider.value
+    })
     window.addEventListener('resize', ::this.setCanvasSize)
-
     this.draw()
   }
 
@@ -77,13 +97,13 @@ export default class Canvas {
       candidate: false
     }
 
-    for (let i = 0; i <= this.settings.ballsAmount; i++) {
+    for (let i = 0; i <= this.settings.generate.ballsAmount; i++) {
       let ball = Object.assign({}, ballTemplate)
-      ball.width = this.getRandomInt(this.settings.ballMinWidth, this.settings.ballMaxWidth)
+      ball.width = this.getRandomInt(this.settings.generate.ballMinWidth, this.settings.generate.ballMaxWidth)
       ball.x = this.getRandomInt(ball.width, (this.canvas.width - ball.width))
-      ball.y = ball.width
-      ball.velocityY = this.getRandomInt(1, 100) * 0.01
-      ball.velocityX = this.getRandomInt(1, 100) * 0.01
+      ball.y = this.getRandomInt((ball.width * 2), (this.canvas.height - (ball.width * 2)))
+      ball.velocityY = this.getRandomInt(1, 100) * this.settings.generate.velocityY
+      ball.velocityX = this.getRandomInt(1, 100) * this.settings.generate.velocityX
       ball.colour = this.colours[this.getRandomInt(0, (this.colours.length - 1))]
       this.balls.push(ball)
     }
@@ -93,7 +113,6 @@ export default class Canvas {
    * Draws onto the canvas
    */
   draw () {
-    console.log('looopde doop')
     // Do something
     this.ctx.fillStyle = 'black'
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -101,8 +120,9 @@ export default class Canvas {
 
     for (let i = 0; i < this.balls.length - 1; i++) {
       let candidates = this.getCandidates(this.balls[i].x, this.balls[i].y)
-      this.balls[i].candidate = false
-      if (candidates.length) {
+      this.balls[i].candidate = true
+      if (candidates.length > 0) {
+        this.balls[i].candidate = false
         candidates.sort((a, b) => {
           const aArc = Math.atan2(a.x, a.y)
           const bArc = Math.atan2(b.x, b.y)
@@ -116,13 +136,12 @@ export default class Canvas {
           return 0
         })
         this.ctx.beginPath()
-        for (let i = 0; i < candidates.length - 1; i++) {
-          this.balls[this.balls.indexOf(candidates[i])].candidate = true
-          // const halfWidth = candidates[i].width * 0.5
-          if (i === 0) {
-            this.ctx.moveTo(candidates[i].x, candidates[i].y)
+        for (let j = 1; j < candidates.length; j++) {
+          // this.balls[this.balls.indexOf(candidates[i])].candidate = true
+          if (j === 0) {
+            this.ctx.moveTo(candidates[j].x, candidates[j].y)
           } else {
-            this.ctx.lineTo(candidates[i].x, candidates[i].y)
+            this.ctx.lineTo(candidates[j].x, candidates[j].y)
           }
         }
         this.ctx.stroke()
@@ -135,15 +154,6 @@ export default class Canvas {
       this.ctx.strokeStyle = 'white'
       this.ctx.fill()
       this.ctx.stroke()
-
-      // if (this.balls[i].candidate) {
-      //   // Bounding rect
-      //   const halfTile = 0.5 * this.settings.collision.tileSize
-      //   this.ctx.beginPath()
-      //   this.ctx.rect(this.balls[i].x - halfTile, this.balls[i].y - halfTile, this.settings.collision.tileSize, this.settings.collision.tileSize)
-      //   this.ctx.strokeStyle = 'lightgreen'
-      //   this.ctx.stroke()
-      // }
 
       this.balls[i].x += this.balls[i].velocityX
       this.balls[i].y += this.balls[i].velocityY
@@ -159,7 +169,6 @@ export default class Canvas {
         this.balls[i].velocityY *= -(this.balls[i].cor)
       }
     }
-
     // Recurse
     if (this.settings.playing) this.loop = requestAnimationFrame(::this.draw)
   }
@@ -174,7 +183,7 @@ export default class Canvas {
 
     fBalls = this.balls.filter((value, index, arr) => {
       let candidates = []
-      const halfTile = 0.5 * this.settings.collision.tileSize
+      const halfTile = 0.5 * (this.settings.collision.tileSize + value.width)
       const startX = x - halfTile
       const endX = x + halfTile
       const startY = y - halfTile

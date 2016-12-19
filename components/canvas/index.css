@@ -1,6 +1,6 @@
 [data-component='canvas'] {
-  width: 99vw;
-  height: 99vh;
+  width: 99%;
+  height: 99%;
   margin: 0 auto;
   box-sizing: border-box;
   position: relative;
@@ -14,12 +14,40 @@
       font-weight: bold;
     }
   }
-  & canvas {
-    /*border: .25em solid violet;*/
-  }
+  & canvas {}
   & .toggle {
     position: absolute;
     top: 0;
     left: 0;
+  }
+
+  & .wrapper {
+    display: flex;
+    height: 100%;
+    justify-content: flex-start;
+    & > div {
+      display: flex;
+    }
+  }
+  & .particles {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 100vw;
+  }
+  & .controls {
+    width: 20vw;
+    padding: 1em;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 20vw;
+    height: auto;
+    background-color: #222;
+  }
+  & .slider {
+    & > input {
+      display: block;
+      width: 100%;
+    }
   }
 }
