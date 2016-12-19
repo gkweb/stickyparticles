@@ -15,12 +15,15 @@
     }
   }
   & canvas {}
-  & .toggle {
+  & .toggle-controls {
     position: absolute;
-    top: 0;
-    left: 0;
+    right: 1em;
+    top: 1em;
+    border: 0;
+    padding: .5em 1em;
+    margin: 0;
+    outline: 0;
   }
-
   & .wrapper {
     display: flex;
     height: 100%;
@@ -38,11 +41,25 @@
     width: 20vw;
     padding: 1em;
     flex-direction: column;
-    flex-grow: 1;
-    flex-shrink: 1;
+    flex-grow: 0;
+    flex-shrink: 0;
     flex-basis: 20vw;
     height: auto;
     background-color: #222;
+
+    & button {
+      outline: 0;
+      border: 1px solid purple;
+      padding: .5em 1em;
+      margin-bottom: .5em;
+      text-shadow: none;
+      background-color: violet;
+      transition: background-color .5s ease;
+      cursor: pointer;
+      &:hover {
+        background-color: purple;
+      }
+    }
   }
   & .slider {
     & > input {

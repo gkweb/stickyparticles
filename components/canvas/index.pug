@@ -4,18 +4,22 @@ mixin canvas(props)
     .wrapper
       .particles
         canvas#canvas(width=500, height=500)
-      .controls
-        button.toggle!= 'toggle'
-        button.generate!= 'Generate'
-        .slider
-          label(for='ctrl-particles-amount')!='Particles Amount:'
-          input#ctrl-particles-amount(type='range', min=0, max=200, class='ctrl-particles-amount', value=100)
-        .slider
-          label(for='ctrl-velocity-x')!='Velocity X:'
-          input#ctrl-velocity-x(type='range', min=0.001, max=1, step=0.001, class='ctrl-velocity-x', value=0.001)
-        .slider
-          label(for='ctrl-velocity-y')!='Velocity Y:'
-          input#ctrl-velocity-y(type='range', min=0.001, max=1, step=0.001, class='ctrl-velocity-y', value=0.001)
-        .slider
-          label(for='ctrl-gravity')!='Gravity:'
-          input#ctrl-gravity(type='range', min=0, max=0.1, step=0.001, class='ctrl-gravity', value=0)
+      button.toggle-controls!='Controls ->'
+      aside.controls
+        button.toggle!= 'Pause'
+        section
+          .slider
+            label(for='ctrl-gravity')!='Gravity:'
+            input#ctrl-gravity(type='range', min=0, max=0.1, step=0.001, class='ctrl-gravity', value=0)
+        section
+          h3!='Generate more:'
+          button.generate!= 'Generate'
+          .slider
+            label(for='ctrl-particles-amount')!='Particles Amount:'
+            input#ctrl-particles-amount(type='range', min=0, max=200, class='ctrl-particles-amount', value=100)
+          .slider
+            label(for='ctrl-velocity-x')!='Velocity X:'
+            input#ctrl-velocity-x(type='range', min=0.001, max=1, step=0.001, class='ctrl-velocity-x', value=0.001)
+          .slider
+            label(for='ctrl-velocity-y')!='Velocity Y:'
+            input#ctrl-velocity-y(type='range', min=0.001, max=1, step=0.001, class='ctrl-velocity-y', value=0.001)
