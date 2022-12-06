@@ -17,7 +17,7 @@
     "dom4": "^1.8.3",
     "domready": "^1.0.8",
     "dotenv": "^2.0.0",
-    "express": "^4.14.0",
+    "express": "^4.17.3",
     "fs": "0.0.1-security",
     "fs-extra": "^1.0.0",
     "path": "^0.12.7",
